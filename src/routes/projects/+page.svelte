@@ -2,17 +2,19 @@
 <svelte:head>
 	<title>Projects</title>
 </svelte:head>
-<script>import projects from '$lib/projects.json';</script>
+<script> import projects from '$lib/projects.json'; 
+import Project from "$lib/Project.svelte"; </script>
 
 <h1>{projects.length} Projects</h1>
 <!-- <pre>{ JSON.stringify(projects, null, "\t") }</pre> -->
 <div class="projects">
     {#each projects as p}
-        <article>
+        <!-- <article>
             <h2>{p.title}</h2>
             <img src={p.image} alt="">
             <p>{p.description}</p>
-        </article>
+        </article> -->
+        <Project info={p} />
     {/each}
    
     <!-- <article>
