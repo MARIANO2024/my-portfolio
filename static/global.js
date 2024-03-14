@@ -45,29 +45,29 @@ function $$ (selector, context = document) {
 	
 // }
 
-document.body.insertAdjacentHTML("afterbegin", `
-	<label class="color-scheme">
-		Theme:
-		<select>
-		<option value="dark">Dark</option>
-		<option value="light dark">Light Dark</option>
-		<option value="light">Light</option>
-		</select>
-	</label>`
-);
+// document.body.insertAdjacentHTML("afterbegin", `
+// 	<label class="color-scheme">
+// 		Theme:
+// 		<select>
+// 		<option value="dark">Dark</option>
+// 		<option value="light dark">Light Dark</option>
+// 		<option value="light">Light</option>
+// 		</select>
+// 	</label>`
+// );
 
-let select= document.querySelector("select");
+// let select= document.querySelector("select");
 
-if("colorScheme" in localStorage){
-	document.documentElement.style.setProperty("color-scheme", localStorage.colorScheme);
-	select.value=localStorage.colorScheme
-}
+// if("colorScheme" in localStorage){
+// 	document.documentElement.style.setProperty("color-scheme", localStorage.colorScheme);
+// 	select.value=localStorage.colorScheme
+// }
 
-select.addEventListener("input", function (event) {
-	console.log("color scheme changed to", event.target.value);
-	document.documentElement.style.setProperty("color-scheme", event.target.value);
-	localStorage.colorScheme = event.target.value;
+// select.addEventListener("input", function (event) {
+// 	console.log("color scheme changed to", event.target.value);
+// 	document.documentElement.style.setProperty("color-scheme", event.target.value);
+// 	localStorage.colorScheme = event.target.value;
 
 	
-});
+// });
 

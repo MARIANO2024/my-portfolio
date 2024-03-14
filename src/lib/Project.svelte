@@ -9,7 +9,7 @@ export let hLevel = 2;
     <p>{p.description}</p> -->
     <!-- <h2>{info.title}</h2> -->
     <svelte:element this={"h" + hLevel}>{ info.title }</svelte:element>
-    <img src={info.image} alt={info.title}>
+    <img src={info.image} alt={info.title} style="max-width: 100%; height: auto;">
     <p>{info.description}</p>
 </article>
 

@@ -108,6 +108,21 @@ h3{
   right:1rem; 
 }
 
-select,input,textarea,button{
-  font-family: inherit;
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px; /* Adjust the gap between the grid items */
+}
+
+dt, dd {
+  margin: 0; 
+  padding: 5px; 
+}
+
+dt {
+  grid-row: 1; 
+}
+
+dd {
+  grid-row: 2; 
 }
