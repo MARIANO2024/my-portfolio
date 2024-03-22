@@ -19,10 +19,46 @@ body {
   
 
 }
-
-ul, li {
-  display: contents;
+li {
+  
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  
 }
+ul{
+  
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9em, 1fr));
+  
+
+}
+.swatch{
+width: 20px;
+aspect-ratio:1/1;
+background-color:var(--color);
+border-radius:50%;
+
+
+}
+.container{
+
+  display: flex;
+  gap:20px;
+  
+}
+span{
+
+  display: inline-block
+  
+}
+.legend{
+  display: grid;
+  border: 2px solid rgba(128, 128, 128, 0.5);
+  padding: 10px;
+  flex:1;
+}
+
 nav{
   --border-color: oklch(50% 10% 200 / 40%);
   display: flex;
@@ -110,8 +146,9 @@ h3{
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px; /* Adjust the gap between the grid items */
+  border-width: 30px;
 }
 
 dt, dd {
@@ -126,3 +163,42 @@ dt {
 dd {
   grid-row: 2; 
 }
+
+.year_tag{
+  display: grid;
+  border-bottom: 10%;
+}
+
+svg {
+	max-width: 20em;
+	margin-block: 2em;
+
+	/* Do not clip shapes outside the viewBox */
+	overflow: visible;
+  
+}
+
+.git_stats{
+
+  display: grid;
+  border: 2px solid rgba(128, 128, 128, 0.5);
+  padding: 10px;
+  flex:1;
+}
+
+svg:has(path:hover) {
+	path:not(:hover) {
+		opacity: 50%;
+	}
+}
+
+path {
+	transition: 300ms;
+}
+
+.selected {
+  --color: oklch(100 0 0) !important;
+  &:is(path) {
+  fill: var(--color);
+  }
+ }

@@ -2,76 +2,48 @@
 <svelte:head>
 	<title>Projects</title>
 </svelte:head>
-<script> import projects from '$lib/projects.json'; 
-import Project from "$lib/Project.svelte"; </script>
+
+<script> 
+import * as d3 from 'd3';
+import Pie from '$lib/Pie.svelte';
+import projects from '$lib/projects.json'; 
+import Project from "$lib/Project.svelte"; 
+
+let query = "";
+
+let filteredProjects;
+$: filteredProjects = projects.filter(project => {
+	let values = Object.values(project).join("\n").toLowerCase();
+	return values.includes(query.toLowerCase());
+});
+let pieData;
+$: {let rolledData = d3.rollups(filteredProjects, v => v.length, d => d.year);
+    pieData = rolledData.map(([year, count]) => {
+        return { value: count, label: year ? year.toString() : 'Unknown' };
+    });
+
+}
+
+let selectedYearIndex = -1;
+let selectedYear;
+$: selectedYear = selectedYearIndex > -1 ? pieData[selectedYearIndex].label : null;
+</script>
 
 <h1>{projects.length} Projects</h1>
-<!-- <pre>{ JSON.stringify(projects, null, "\t") }</pre> -->
+
+<Pie data={pieData} bind:selectedIndex={selectedYearIndex} />
+
+<input type="search" bind:value={query}
+       aria-label="Search projects" placeholder="🔍 Search projects…" />
+
+
+
 <div class="projects">
-    {#each projects as p}
-        <!-- <article>
-            <h2>{p.title}</h2>
-            <img src={p.image} alt="">
-            <p>{p.description}</p>
-        </article> -->
+    {#each filteredProjects as p}
+       
         <Project info={p} />
     {/each}
    
-    <!-- <article>
-        <h2>Data Vis Prototyping</h2>
-        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="">
-        <p>Quis, beatae repellendus culpa blanditiis inventore molestiae? Optio repellat nesciunt voluptate minima quasi, enim cum et, molestias aspernatur nemo molestiae totam id cupiditate fugiat! Nihil repudiandae fuga recusandae eveniet sit?</p>
-    </article>
-    <article>
-        <h2>M for Music</h2>
-        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="">
-        <p>Ex perferendis voluptatem modi reiciendis ullam est alias laboriosam tenetur eum voluptatibus vitae minus doloribus earum soluta, obcaecati magni asperiores neque facere exercitationem itaque. Repellendus reprehenderit nisi atque voluptate ullam.</p>
-    </article>
-    <article>
-        <h2>Facilis quo optio nisi.</h2>
-        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="">
-        <p>Reiciendis, quod velit? Adipisci sequi vero voluptatibus accusantium! Esse magni obcaecati, facilis odio molestiae porro accusamus? Distinctio voluptatem autem sed similique dolor, enim quis perspiciatis dolorum delectus eius cum ratione?</p>
-    </article>
-    <article>
-        <h2>Veniam sequi cupiditate illum?</h2>
-        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="">
-        <p>Qui nam dolorem non, est perspiciatis ipsa quae cumque sit ut. Fugit tempora obcaecati necessitatibus, mollitia cumque eveniet ratione quas, praesentium repudiandae perferendis quos voluptatum, perspiciatis nemo unde! Reprehenderit, dicta.</p>
-    </article>
-    <article>
-        <h2>Iusto dolores nisi mollitia!</h2>
-        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="">
-        <p>Non tenetur ex, dolores necessitatibus laboriosam asperiores, illo tempora voluptatem cupiditate nulla expedita. Nesciunt eveniet autem dignissimos minima cumque consectetur, natus velit facere doloribus quo assumenda? Nihil ducimus aliquam natus!</p>
-    </article>
-    <article>
-        <h2>Cupiditate distinctio dolor ad?</h2>
-        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="">
-        <p>Error, nesciunt! Provident architecto explicabo modi temporibus quas dolores et nemo fuga debitis iure? Voluptas eligendi quisquam eos, illum quos nam saepe cumque laudantium excepturi fuga ab beatae perspiciatis modi?</p>
-    </article>
-    <article>
-        <h2>Quidem, excepturi id. Animi?</h2>
-        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="">
-        <p>Dolorum non dicta vel eligendi, nostrum illo laborum accusantium repudiandae ipsa. In maiores ipsam laudantium, dolore sunt animi, consectetur odit modi, quam enim numquam itaque. Deserunt recusandae quos totam delectus?</p>
-    </article>
-    <article>
-        <h2>Quis sint perspiciatis consectetur.</h2>
-        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="">
-        <p>Quisquam cupiditate voluptatum doloribus voluptate quaerat. Nesciunt deleniti totam beatae corrupti quas unde laudantium possimus accusantium, fugit, ipsam sequi expedita fuga officia, aliquam quis facere necessitatibus! Dolor vel corrupti id!</p>
-    </article>
-    <article>
-        <h2>Numquam minus iusto esse.</h2>
-        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="">
-        <p>Nulla ratione itaque quod obcaecati architecto, eligendi ipsum nihil ipsam id voluptate, suscipit qui delectus praesentium amet tempora debitis eaque aperiam deleniti similique ab recusandae rerum! Fugiat eligendi quis unde.</p>
-    </article>
-    <article>
-        <h2>Pariatur enim eaque magni!</h2>
-        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="">
-        <p>Tenetur doloremque mollitia, inventore magnam quae ex veritatis provident ipsa iure odio accusamus consequatur explicabo pariatur neque quibusdam quidem accusantium unde tempore ipsam vitae est dolores. Modi eveniet alias vero?</p>
-    </article>
-    <article>
-        <h2>Aspernatur accusantium porro nesciunt.</h2>
-        <img src="https://vis-society.github.io/labs/2/images/empty.svg" alt="">
-        <p>Quia eaque odit cupiditate deleniti, voluptatum perferendis cum doloremque vel aut dicta dolor iusto repellendus nemo rerum eveniet, harum perspiciatis ut fugiat. Vero magni eveniet molestias officia necessitatibus impedit modi.</p>
-    </article> -->
 </div>
 
 

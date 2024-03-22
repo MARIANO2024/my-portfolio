@@ -1,16 +1,20 @@
 
-<script>export let info = {};
+<script>
+
+export let info = {};
 export let hLevel = 2;
+
 </script>
-<!-- let p = info; -->
+
 <article>
-    <!-- <h2>{p.title}</h2>
-    <img src={p.image} alt="">
-    <p>{p.description}</p> -->
-    <!-- <h2>{info.title}</h2> -->
+    
     <svelte:element this={"h" + hLevel}>{ info.title }</svelte:element>
     <img src={info.image} alt={info.title} style="max-width: 100%; height: auto;">
-    <p>{info.description}</p>
+    <div class="year_tag"> <p>{info.description}</p> c. {info.year} </div>
+    
+   
+    
 </article>
+
 
 
