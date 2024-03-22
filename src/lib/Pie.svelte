@@ -17,14 +17,22 @@
 
     export let selectedIndex =  -1;
 
+    function toggleWedge (index, event) {
+	if (!event.key || event.key === "Enter") {
+		selectedIndex = selectedIndex === index ? -1 : index;
+	}
+
+}
+// on:click={e => selectedIndex = selectedIndex === i ? -1 : i} />
 </script>
 
 <div class="container">
     <svg viewBox="-50 -50 100 100">
         {#each arcs as arc,i}
-            <path d={arc} fill={colors(i)}
+            <path tabindex="0" role="button" aria-label="Wedge" d={arc} fill={colors(i)}
             class:selected={selectedIndex === i}
-            on:click={e => selectedIndex = selectedIndex === i ? -1 : i} />
+            on:click={e => toggleWedge(i, e)} 
+            on:keyup={e => toggleWedge(i, e)}/>
         {/each}
     </svg> 
 
@@ -38,8 +46,3 @@
     </ul>
 </div>
 
-<!-- {#each arcs as arc, index}
-    <path d={arc} fill={ colors(index) }
-        class:selected={selectedIndex === index}
-        on:click={e => selectedIndex = index} />
-{/each} -->

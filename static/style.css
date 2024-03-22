@@ -186,14 +186,15 @@ svg {
   flex:1;
 }
 
-svg:has(path:hover) {
-	path:not(:hover) {
+svg:has(path:hover, path:focus-visible) {
+	path:not(:hover, :focus-visible) {
 		opacity: 50%;
 	}
 }
 
 path {
 	transition: 300ms;
+  outline: none;
 }
 
 .selected {

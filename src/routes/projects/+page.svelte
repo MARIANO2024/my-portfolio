@@ -27,6 +27,9 @@ $: {let rolledData = d3.rollups(filteredProjects, v => v.length, d => d.year);
 let selectedYearIndex = -1;
 let selectedYear;
 $: selectedYear = selectedYearIndex > -1 ? pieData[selectedYearIndex].label : null;
+
+let filteredByYear;
+$: filteredByYear = selectedYear ? filteredProjects.filter(project => project.year === selectedYear) : filteredProjects;
 </script>
 
 <h1>{projects.length} Projects</h1>
@@ -39,7 +42,7 @@ $: selectedYear = selectedYearIndex > -1 ? pieData[selectedYearIndex].label : nu
 
 
 <div class="projects">
-    {#each filteredProjects as p}
+    {#each filteredByYear as p}
        
         <Project info={p} />
     {/each}
