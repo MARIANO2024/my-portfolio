@@ -185,6 +185,13 @@ svg {
   padding: 10px;
   flex:1;
 }
+dl.stats{
+
+  display: grid;
+  border: 2px solid rgba(128, 128, 128, 0.5);
+  padding: 10px;
+  flex:1;
+}
 
 svg:has(path:hover, path:focus-visible) {
 	path:not(:hover, :focus-visible) {
