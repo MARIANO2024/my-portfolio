@@ -145,17 +145,17 @@
 </svg>
 <p>{hoveredIndex}</p>
 <dl id="commit-tooltip" class="info tooltip">
-    <dt>Commit</dt>
-    <dd><a href="{ hoveredCommit.url }" target="_blank">{ hoveredCommit.id }</a></dd>
+    <dt class="info">Commit</dt>
+    <dd class="info"><a href="{ hoveredCommit.url }" target="_blank">{ hoveredCommit.id }</a></dd>
 
-    <dt>Date</dt>
-    <dd>{ hoveredCommit.datetime?.toLocaleString("en", {date: "full"}) }</dd>
+    <dt class="info">Date</dt>
+    <dd class="info">{ hoveredCommit.datetime?.toLocaleString("en", {date: "full"}) }</dd>
 
-    <dt>Author</dt>
-    <dd>{ hoveredCommit.author }</dd>
+    <dt class="info">Author</dt>
+    <dd class="info">{ hoveredCommit.author }</dd>
 
-    <dt>Edited Lines</dt>
-    <dd>{ hoveredCommit.totalLines}</dd>
+    <dt class="info">Edited Lines</dt>
+    <dd class="info">{ hoveredCommit.totalLines}</dd>
 
 </dl>
 

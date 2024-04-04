@@ -217,7 +217,7 @@ path {
 
 dl.info {
   display: grid;
-  grid-template-columns: 1fr 1fr; 
+  grid-template-columns: auto 1fr; 
   gap: 10px; 
   margin: 0; 
   transition-duration: 500ms;
@@ -229,15 +229,17 @@ dl.info {
 	}
 }
 
-dl.info dt {
+dt.info{
+  grid-column: 1;
   font-weight: normal; 
   color: #666; 
-  margin: 0; 
+  /* margin: 0;  */
 }
 
-dl.info dd {
+dd.info{
+  grid-column: 2;
   font-weight: bold; 
-  margin: 0; 
+  margin-left: 0; 
 }
 
 .tooltip {
