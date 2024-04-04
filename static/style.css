@@ -210,3 +210,51 @@ path {
   fill: var(--color);
   }
  }
+
+ .gridlines {
+	stroke-opacity: .2;
+}
+
+dl.info {
+  display: grid;
+  grid-template-columns: auto auto; 
+  gap: 10px; 
+  margin: 0; 
+  transition-duration: 500ms;
+	transition-property: opacity, visibility;
+
+	&[hidden]:not(:hover, :focus-within) {
+		opacity: 0;
+		visibility: hidden;
+	}
+}
+
+dl.info dt {
+  font-weight: normal; 
+  color: #666; 
+  margin: 0; 
+}
+
+dl.info dd {
+  font-weight: bold; 
+  margin: 0; 
+}
+
+.tooltip {
+  position: fixed;
+  top: 1em;
+  left: 1em;
+  background-color: rgba(0,0,0,0.75); 
+  color: white; 
+  padding: 8px; 
+  border-radius: 4px; 
+}
+
+circle {
+	transition: 200ms;
+
+
+	&:hover {
+		transform: scale(1.5);
+	}
+}

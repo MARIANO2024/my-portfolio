@@ -60,10 +60,44 @@
         
 
     
-    const yScale= d3.scaleLinear().domain([0,24]).range([0,height]);
-    let xScale;
-    $: xScale= d3.scaleTime().domain([d3.min(data, d=> d.date),d3.max(data, d=> d.date)]).range([0,width]);
     
+    let xScale,yScale;
+    $: {
+    xScale= d3.scaleTime().domain([d3.min(data, d=> d.date),d3.max(data, d=> d.date)]).range([0,width]);
+    yScale= d3.scaleLinear().domain([0,24]).range([0,height]);
+    }
+    let margin = {top: 10, right: 10, bottom: 30, left: 20};
+    let usableArea = {
+        top: margin.top,
+        right: width - margin.right,
+        bottom: height - margin.bottom,
+        left: margin.left
+    };
+    usableArea.width = usableArea.right - usableArea.left;
+    usableArea.height = usableArea.bottom - usableArea.top;
+    
+    let xAxis, yAxis;
+    $: {
+	d3.select(xAxis).call(d3.axisBottom(xScale));
+	// d3.select(yAxis).call(d3.axisLeft(yScale));
+    d3.select(yAxis).call(d3.axisLeft(yScale).tickFormat(d => String(d % 24).padStart(2, "0") + ":00"));
+    }   
+
+    let yAxisGridlines;
+    $:{
+    
+	d3.select(yAxisGridlines).call(
+		d3.axisLeft(yScale)
+		  .tickFormat("")
+          .tickSize(-usableArea.width)
+	);
+
+    }
+
+    let hoveredIndex = -1;
+    $: hoveredCommit = commits[hoveredIndex] ?? {};
+
+
 </script>
 
 <header>
@@ -87,18 +121,42 @@
 
 <svg viewBox="0 0 {width} {height}">
 
+    <g class="gridlines" transform="translate({usableArea.left}, 0)" bind:this={yAxisGridlines} />
+    <g transform="translate(0, {usableArea.bottom})" bind:this={xAxis} />
+    <g transform="translate({usableArea.left}, 0)" bind:this={yAxis} />
+
     <g class="dots">
         {#each commits as commit, index }
-            <circle
-                cx={ xScale(commit.datetime) }
-                cy={ yScale(commit.hourFrac) }
-                r="5"
-                fill="steelblue"
-            />
+       
+        <circle 
+            on:mouseenter={evt => (hoveredIndex = index)}
+            on:mouseleave={evt => (hoveredIndex = -1)}
+            cx={xScale(commit.datetime)}
+            cy={yScale(commit.hourFrac)}
+            r="5"
+            fill="steelblue"
+        />
+
+
         {/each}
     </g>
 
 </svg>
+
+<dl id="commit-tooltip" class="info tooltip">
+    <dt>Commit</dt>
+    <dd><a href="{ hoveredCommit.url }" target="_blank">{ hoveredCommit.id }</a></dd>
+
+    <dt>Date</dt>
+    <dd>{ hoveredCommit.datetime?.toLocaleString("en", {date: "full"}) }</dd>
+
+    <dt>Author</dt>
+    <dd>{ hoveredCommit.author }</dd>
+
+    <dt>Edited Lines</dt>
+    <dd>{ hoveredCommit.totalLines}</dd>
+
+</dl>
 
 <style>
 	svg {
