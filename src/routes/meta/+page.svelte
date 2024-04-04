@@ -47,8 +47,6 @@
         // const xScale= d2.scaleTime().domain(0,d3.max(ret.date)).range(0,width);
 
         return ret;
-
-        
     
     });
 
@@ -61,12 +59,9 @@
 
     
     
-    let xScale,yScale;
-    $: {
-    xScale= d3.scaleTime().domain([d3.min(data, d=> d.date),d3.max(data, d=> d.date)]).range([0,width]);
-    yScale= d3.scaleLinear().domain([0,24]).range([0,height]);
-    }
+    
     let margin = {top: 10, right: 10, bottom: 30, left: 20};
+
     let usableArea = {
         top: margin.top,
         right: width - margin.right,
@@ -76,6 +71,12 @@
     usableArea.width = usableArea.right - usableArea.left;
     usableArea.height = usableArea.bottom - usableArea.top;
     
+    let xScale,yScale;
+    $: {
+    xScale= d3.scaleTime().domain([d3.min(data, d=> d.date),d3.max(data, d=> d.date)]).range([usableArea.left,usableArea.right]);
+    yScale= d3.scaleLinear().domain([0,24]).range([usableArea.bottom,usableArea.top]);
+    }
+
     let xAxis, yAxis;
     $: {
 	d3.select(xAxis).call(d3.axisBottom(xScale));
@@ -142,7 +143,7 @@
     </g>
 
 </svg>
-
+<p>{hoveredIndex}</p>
 <dl id="commit-tooltip" class="info tooltip">
     <dt>Commit</dt>
     <dd><a href="{ hoveredCommit.url }" target="_blank">{ hoveredCommit.id }</a></dd>
@@ -158,9 +159,9 @@
 
 </dl>
 
-<style>
+<!-- <style>
 	svg {
 		overflow: visible;
 	}
-</style>
+</style> -->
 

@@ -217,7 +217,7 @@ path {
 
 dl.info {
   display: grid;
-  grid-template-columns: auto auto; 
+  grid-template-columns: 1fr 1fr; 
   gap: 10px; 
   margin: 0; 
   transition-duration: 500ms;
@@ -255,6 +255,9 @@ circle {
 
 
 	&:hover {
+    transform-origin: center;
+    transform-box: fill-box;
+
 		transform: scale(1.5);
 	}
 }
