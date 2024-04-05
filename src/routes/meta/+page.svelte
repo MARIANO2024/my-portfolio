@@ -98,6 +98,19 @@
     let hoveredIndex = -1;
     $: hoveredCommit = commits[hoveredIndex] ?? {};
 
+    let cursor = {x: 0, y: 0};
+
+    function brushed (evt) {
+	console.log(evt);
+    }   
+
+    let svg;
+    $: {
+	d3.select(svg).call(d3.brush().on("start brush end", brushed));
+    d3.select(svg).selectAll(".dots, .overlay ~ *").raise();
+
+
+}
 
 </script>
 
@@ -120,17 +133,19 @@
 </dl>
 
 
-<svg viewBox="0 0 {width} {height}">
+<svg viewBox="0 0 {width} {height}" bind:this={svg}>
 
     <g class="gridlines" transform="translate({usableArea.left}, 0)" bind:this={yAxisGridlines} />
     <g transform="translate(0, {usableArea.bottom})" bind:this={xAxis} />
     <g transform="translate({usableArea.left}, 0)" bind:this={yAxis} />
 
+
     <g class="dots">
         {#each commits as commit, index }
        
         <circle 
-            on:mouseenter={evt => (hoveredIndex = index)}
+            on:mouseenter={evt => {hoveredIndex = index;
+             cursor = {x: evt.x, y: evt.y};}}
             on:mouseleave={evt => (hoveredIndex = -1)}
             cx={xScale(commit.datetime)}
             cy={yScale(commit.hourFrac)}
@@ -144,7 +159,10 @@
 
 </svg>
 <p>{hoveredIndex}</p>
-<dl id="commit-tooltip" class="info tooltip">
+<p>{JSON.stringify(cursor, null, "\t")}</p>
+
+<dl  class="tooltip" hidden={hoveredIndex === -1} style="top: {cursor.y}px; left: {cursor.x}px">
+    
     <dt class="info">Commit</dt>
     <dd class="info"><a href="{ hoveredCommit.url }" target="_blank">{ hoveredCommit.id }</a></dd>
 

@@ -46,3 +46,16 @@
     </ul>
 </div>
 
+<style>
+
+    svg {
+        max-width: 20em;
+        margin-block: 2em; 
+    
+        /* Do not clip shapes outside the viewBox */
+        overflow: visible;
+      
+    }
+</style>
+    
+
