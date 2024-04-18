@@ -6,6 +6,8 @@
     import * as d3 from "d3";
     import { onMount } from "svelte";
 
+    import Pie from "$lib/Pie.svelte";
+
     let data = []; 
     let commits = [];
     
@@ -55,12 +57,10 @@
 
     let width = 1000;
     let height = 600;
-        
-
     
     
     
-    let margin = {top: 10, right: 10, bottom: 30, left: 20};
+    let margin = {top: 10, right: 10, bottom: 30, left: 40};
 
     let usableArea = {
         top: margin.top,
@@ -73,7 +73,7 @@
     
     let xScale,yScale;
     $: {
-    xScale= d3.scaleTime().domain([d3.min(data, d=> d.date),d3.max(data, d=> d.date)]).range([usableArea.left,usableArea.right]);
+    xScale= d3.scaleTime().domain([d3.min(data, d=> d.datetime),d3.max(data, d=> d.datetime)]).range([usableArea.left,usableArea.right]).nice();
     yScale= d3.scaleLinear().domain([0,24]).range([usableArea.bottom,usableArea.top]);
     }
 
@@ -100,17 +100,47 @@
 
     let cursor = {x: 0, y: 0};
 
-    function brushed (evt) {
-	console.log(evt);
-    }   
+      
 
     let svg;
     $: {
 	d3.select(svg).call(d3.brush().on("start brush end", brushed));
     d3.select(svg).selectAll(".dots, .overlay ~ *").raise();
 
+    }
 
-}
+    
+   let brushSelection;
+    $: brushSelection;
+   
+   function brushed (evt) {
+        // console.log(evt);
+	    brushSelection = evt.selection;
+    } ;
+
+
+    function isCommitSelected (commit) {
+        console.log(brushSelection);
+        if (!brushSelection) {
+            return false;
+        }
+	
+        let min = {x: brushSelection[0][0], y: brushSelection[0][1]};
+        let max = {x: brushSelection[1][0], y: brushSelection[1][1]};
+        let x = xScale(commit.date);
+        let y = yScale(commit.hourFrac);
+        console.log(x,y);
+        return x >= min.x && x <= max.x && y >= min.y && y <= max.y;
+    }
+    
+    $: selectedCommits = brushSelection ? commits.filter(isCommitSelected) : [];
+    $: hasSelection = brushSelection && selectedCommits.length > 0;
+
+    $: selectedLines = (hasSelection ? selectedCommits : commits).flatMap(d => d.lines);
+
+    $: languageBreakdown= d3.rollups(selectedLines, v => v.length, d => d.type);
+    
+
 
 </script>
 
@@ -151,6 +181,7 @@
             cy={yScale(commit.hourFrac)}
             r="5"
             fill="steelblue"
+            class:selected={isCommitSelected(commit)}
         />
 
 
@@ -158,8 +189,7 @@
     </g>
 
 </svg>
-<p>{hoveredIndex}</p>
-<p>{JSON.stringify(cursor, null, "\t")}</p>
+<p>{hasSelection ? selectedCommits.length : "No"} commits selected</p>
 
 <dl  class="tooltip" hidden={hoveredIndex === -1} style="top: {cursor.y}px; left: {cursor.x}px">
     
@@ -177,9 +207,11 @@
 
 </dl>
 
-<!-- <style>
-	svg {
-		overflow: visible;
-	}
-</style> -->
 
+<Pie data={Array.from(languageBreakdown).map(([language, lines]) => ({label: language, value: lines}))} />
+
+<style>
+    .selected{
+        fill: red;
+    }
+</style>
